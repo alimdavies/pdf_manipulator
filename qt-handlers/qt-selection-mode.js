@@ -1,4 +1,4 @@
-const goSelectionMode = {
+const qtSelectionMode = {
     qt_viewer: document.getElementById('viewer'),
 
     qtSelection: class {
@@ -53,12 +53,19 @@ const goSelectionMode = {
         }
     },
 
-    // ADD STYLING RITORNA CORRETTAMENTE GLI OGGETTI!!
     addStyling() {
         this.text_elements = document.querySelectorAll('.textLayer :is(span, br)')
         Object.values(this.text_elements).forEach((element) => {
             element.style.userSelect = 'none'
             element.style.cursor = 'default'
+        })
+    },
+
+    restoreStyling() {
+        this.text_elements = document.querySelectorAll('.textLayer :is(span, br)')
+        Object.values(this.text_elements).forEach((element) => {
+            element.style.userSelect = 'initial'
+            element.style.cursor = 'initial'
         })
     },
 
@@ -72,26 +79,34 @@ const goSelectionMode = {
     },
 
     handleMouseDown(e) {
-        if (goSelectionMode.qt_selection) goSelectionMode.qt_selection.destroy()
-        let qtPage = goSelectionMode.qtGetPage(e)
-        goSelectionMode.qt_selection = new goSelectionMode.qtSelection(qtPage)
-        goSelectionMode.qt_selection.p1 = { x1: e.clientX, y1: e.clientY }
-        goSelectionMode.qt_viewer.addEventListener("mousemove", goSelectionMode.handleMouseMove)
+        if (qtSelectionMode.qt_selection) qtSelectionMode.qt_selection.destroy()
+        let qtPage = qtSelectionMode.qtGetPage(e)
+        qtSelectionMode.qt_selection = new qtSelectionMode.qtSelection(qtPage)
+        qtSelectionMode.qt_selection.p1 = { x1: e.clientX, y1: e.clientY }
+        qtSelectionMode.qt_viewer.addEventListener("mousemove", qtSelectionMode.handleMouseMove)
     },
 
     handleMouseMove(e) {
-        goSelectionMode.qt_selection.p2 = { x2: e.clientX, y2: e.clientY }
+        qtSelectionMode.qt_selection.p2 = { x2: e.clientX, y2: e.clientY }
     },
 
     handleMouseUp() {
-        goSelectionMode.qt_viewer.removeEventListener("mousemove", goSelectionMode.handleMouseMove)
+        qtSelectionMode.qt_viewer.removeEventListener("mousemove", qtSelectionMode.handleMouseMove)
     },
 
     start() {
         this.addStyling()
         this.qt_viewer.addEventListener("mousedown", this.handleMouseDown)
         this.qt_viewer.addEventListener("mouseup", this.handleMouseUp)
+    },
+
+    stop() {
+        if (typeof qtSelectionMode.qt_selection !== 'undefined') qtSelectionMode.qt_selection.destroy()
+        this.restoreStyling()
+        this.qt_viewer.removeEventListener("mousedown", this.handleMouseDown)
+        this.qt_viewer.removeEventListener("mousemove", this.handleMouseMove)
+        this.qt_viewer.removeEventListener("mouseup", this.handleMouseUp)
     }
 }
 
-export { goSelectionMode }
+export { qtSelectionMode }

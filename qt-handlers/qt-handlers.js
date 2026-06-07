@@ -1,3 +1,3 @@
-import { goSelectionMode } from "./go-selection-mode.js"
+import { qtSelectionMode } from "./qt-selection-mode.js"
 
-window.goSelectionMode = goSelectionMode
+window.qtSelectionMode = qtSelectionMode

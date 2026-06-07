@@ -33,28 +33,11 @@ class MainWindow(QMainWindow):
 
     def handleSelection(self, isChecked):
         if isChecked:
-            self.webView.page().runJavaScript('goSelectionMode.start()')
-        # else:
-        #     self.webView.page().runJavaScript(
-        #         """
-        #         function restoreStyling() {
-        #             let text_elements = document.querySelectorAll('.textLayer :is(span, br)')
-        #             Object.values(text_elements).forEach((element) => {
-        #                 element.style.userSelect = 'initial'
-        #                 element.style.cursor = 'initial'
-        #             })
-        #         }
-
-        #         if (typeof qt_selection !== 'undefined') qt_selection.destroy()
-        #         restoreStyling()
-        #         qt_viewer.removeEventListener("mousedown", handleMouseDown)
-        #         qt_viewer.removeEventListener("mousemove", handleMouseMove)
-        #         qt_viewer.removeEventListener("mouseup", handleMouseUp)
-        #         """
-        #     )
+            self.webView.page().runJavaScript('qtSelectionMode.start()')
+        else:
+            self.webView.page().runJavaScript('qtSelectionMode.stop()')
 
 app = QApplication(argv)
-
 
 window = MainWindow()
 window.showMaximized()
