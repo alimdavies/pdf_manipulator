@@ -106,6 +106,39 @@ const qtSelectionMode = {
         this.qt_viewer.removeEventListener("mousedown", this.handleMouseDown)
         this.qt_viewer.removeEventListener("mousemove", this.handleMouseMove)
         this.qt_viewer.removeEventListener("mouseup", this.handleMouseUp)
+    },
+
+    elementRect: class {
+        constructor(el) {
+            this.x1 = el.getBoundingClientRect().x
+            this.x2 = el.getBoundingClientRect().x + el.getBoundingClientRect().width
+            this.y1 = el.getBoundingClientRect().y
+            this.y2 = el.getBoundingClientRect().y + el.getBoundingClientRect().height
+        }
+    },
+
+    collide(firstEl, secondEl) {
+        let el1 = new this.elementRect(firstEl)
+        let el2 = new this.elementRect(secondEl)
+
+        if (((el2.x1 >= el1.x1) && (el2.x1 <= el1.x2)) && ((el2.y1 >= el1.y1) && (el2.y1 <= el1.y2))) {
+            return true
+        } else if (((el2.x2 >= el1.x1) && (el2.x1 <= el1.x2)) && ((el2.y2 >= el1.y1) && (el2.y1 <= el1.y2))) {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    getCollidingElements() {
+        let selection = document.getElementById('selector-div')
+        let elements = document.querySelectorAll('.textLayer :is(span)')
+        let selected = Array.from(elements).filter((el) => {
+            return this.collide(selection, el)
+        })
+        selected.forEach((el, i) => {
+            console.log(`${i}: ${el.textContent}`)
+        })
     }
 }
 
