@@ -136,9 +136,28 @@ const qtSelectionMode = {
         let selected = Array.from(elements).filter((el) => {
             return this.collide(selection, el)
         })
-        selected.forEach((el, i) => {
-            console.log(`${i}: ${el.textContent}`)
-        })
+
+        let dataset = []
+        selected.forEach((el) => dataset.push(el.textContent))
+
+        return JSON.stringify(dataset)        
+        // selected.forEach((el, i) => {
+        //     console.log(`${i}: ${el.textContent}`)
+        // })
+    },
+
+    getPagesJSON() {
+        let dataset = []
+        let elements = document.querySelectorAll('[aria-label="Page 1"] .textLayer [role="presentation"]')
+        elements.forEach((el) => dataset.push(el.textContent))
+        elements = document.querySelectorAll('[aria-label="Page 2"] .textLayer [role="presentation"]')
+        elements.forEach((el) => dataset.push(el.textContent))
+        elements = document.querySelectorAll('[aria-label="Page 3"] .textLayer [role="presentation"]')
+        elements.forEach((el) => dataset.push(el.textContent))
+        elements = document.querySelectorAll('[aria-label="Page 4"] .textLayer [role="presentation"]')
+        elements.forEach((el) => dataset.push(el.textContent))
+        
+        return JSON.stringify(dataset)        
     }
 }
 

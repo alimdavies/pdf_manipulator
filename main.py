@@ -25,6 +25,11 @@ class MainWindow(QMainWindow):
         self.select_action = self.tool_bar.addAction('Select Text')
         self.select_action.setCheckable(True)
         self.select_action.triggered.connect(self.handleSelection)
+
+        self.dataset_action = self.tool_bar.addAction('Create JSON')
+        self.dataset_action.triggered.connect(self.createJSON)
+        
+
         self.tool_bar.setMovable(False)
 
         self.dock_widget = QDockWidget()
@@ -36,6 +41,18 @@ class MainWindow(QMainWindow):
             self.webView.page().runJavaScript('qtSelectionMode.start()')
         else:
             self.webView.page().runJavaScript('qtSelectionMode.stop()')
+
+    def createJSON(self):
+        def writeSelected(str):
+            with open('data/selected.json', 'w') as f:
+                f.write(str)
+
+        def writePages(str):
+            with open('data/dataset.json', 'w') as f:
+                f.write(str)
+            
+        self.webView.page().runJavaScript('qtSelectionMode.getCollidingElements()', writeSelected)
+        self.webView.page().runJavaScript('qtSelectionMode.getPagesJSON()', writePages)
 
 app = QApplication(argv)
 

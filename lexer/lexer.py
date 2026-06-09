@@ -1,27 +1,38 @@
 import re
+import json
 
-with open('input.txt') as i:
-    txt = i.read()
-str = 'world,'
-pattern = r''
+with open('data/dataset.json', 'r') as f:
+    global DATASET
+    DATASET = json.load(f)
 
-for x in str:
-    if x.isalpha():
-        if x.isupper():
-            pattern += '[A-Z]'
-        elif x.islower():
-            pattern += '[a-z]'
-    
-    if x.isdigit():
-        pattern += '[0-9]'
-    
-    if x == '.':
-        pattern += '.'
+with open('data/selected.json', 'r') as f:
+    global SELECTED
+    SELECTED = json.load(f)
 
-    if x == ',':
-        pattern += ','
+def getReg(str):
+    pattern = r''
+    for x in str:
+        if x.isalpha():
+            if x.isupper():
+                pattern += '[A-Z]'
+            elif x.islower():
+                pattern += '[a-z]'
+        
+        if x.isdigit():
+            pattern += '[0-9]'
+        
+        if x == '.':
+            pattern += '.'
 
-matches = re.finditer(pattern, txt)
+        if x == ',':
+            pattern += ','
+    return pattern
 
-for x in matches:
-    print(x)
+def printArr(arr):
+    for (i, value) in enumerate(arr):
+        print(f"{i}: {value}")
+
+for el in SELECTED:
+    if el == '' or el == ' ': 
+        continue
+    print(f"{el} --> {getReg(el)}\n")
