@@ -9,6 +9,19 @@ with open('data/selected.json', 'r') as f:
     global SELECTED
     SELECTED = json.load(f)
 
+newdata = []
+
+for el in DATASET:
+    subarr = el.split()
+    for x in subarr:
+        newdata.append(x)
+
+DATASET = newdata
+
+for el in SELECTED:
+    if el == '' or el == ' ':
+        SELECTED.remove(el)
+
 def getReg(str):
     pattern = r''
     for x in str:
@@ -32,7 +45,19 @@ def printArr(arr):
     for (i, value) in enumerate(arr):
         print(f"{i}: {value}")
 
-for el in SELECTED:
-    if el == '' or el == ' ': 
-        continue
-    print(f"{el} --> {getReg(el)}\n")
+sample = [getReg(SELECTED[0]), getReg(SELECTED[1]), getReg(SELECTED[2])]
+orders = []
+
+
+for (i, value) in enumerate(DATASET):
+    order = []
+    for (j, patt) in enumerate(sample):
+        if re.match(patt, DATASET[i+j]):
+            order.append(DATASET[i+j])
+        else:
+            order = []
+            break
+    if order != []:
+        orders.append(order)
+
+printArr(orders)
